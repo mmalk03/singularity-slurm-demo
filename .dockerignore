@@ -1,4 +1,4 @@
-.env
+.git/
 .idea/
 .pytest_cache/
 .vagrant/
