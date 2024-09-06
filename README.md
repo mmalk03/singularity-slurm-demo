@@ -37,6 +37,12 @@ sbatch ./scripts/remote/build.sh
 It will build the singularity container in a VM provisioned by Vagrant.
 This has to be run each time your dependencies change (or generally the content of the Dockerfile).
 
+The created file will have a timestamp in its suffix to support multiple versions.
+For easier use, reference the created file in a symbolic link that points to a static path, e.g.: 
+```bash
+ln -sf ~/singularity/mikomel-demo_2024-09-06_07-57-41.sif ~/singularity/mikomel-demo-latest.sif
+```
+
 To run a container with the sample script, run:
 ```bash
 sbatch ./scripts/remote/submit.sh demo/main.py -n 5

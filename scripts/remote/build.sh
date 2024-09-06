@@ -9,15 +9,17 @@
 #SBATCH --export=ALL
 #SBATCH --account=mandziuk-lab
 
+set -ex
+
+timestamp="$(date +'%Y-%m-%d_%H-%M-%S')"
+
 DOCKER_BUILD_DIR='/vagrant'
 DOCKER_FILE_PATH='/vagrant/docker/pytorch.Dockerfile'
 DOCKER_IMAGE_URI='mikomel/demo:latest'
 OUTPUT_DIR_HOST='/raid/shared/mmalkinski'
 OUTPUT_DIR_GUEST='/output'
-OUTPUT_FILENAME="'mikomel-demo-latest'_$(date +'%Y-%m-%d_%H-%M-%S').tar"
-SINGULARITY_CONTAINER_PATH='~/singularity/mikomel-demo-latest.sif'
-
-set -e
+OUTPUT_FILENAME="mikomel-demo-latest_${timestamp}.tar"
+SINGULARITY_CONTAINER_PATH="/home2/faculty/mmalkinski/singularity/mikomel-demo_${timestamp}.sif"
 
 env \
   DOCKER_BUILD_DIR="${DOCKER_BUILD_DIR}" \
