@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #SBATCH --constraint=dgx
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=16GB
+#SBATCH --mem=32GB
 #SBATCH --time=0-2:00:00
 #SBATCH --export=ALL
 #SBATCH --account=mandziuk-lab
@@ -13,13 +13,15 @@ set -ex
 
 timestamp="$(date +'%Y-%m-%d_%H-%M-%S')"
 
+group_dir="/mnt/evafs/groups/mandziuk-lab/mmalkinski"
+
 DOCKER_BUILD_DIR='/vagrant'
-DOCKER_FILE_PATH='/vagrant/docker/pytorch.Dockerfile'
-DOCKER_IMAGE_URI='mikomel/demo:latest'
+DOCKER_FILE_PATH='/vagrant/docker/vllm/Dockerfile'
+DOCKER_IMAGE_URI='mikomel/demo-vllm:latest'
 OUTPUT_DIR_HOST='/raid/shared/mmalkinski'
 OUTPUT_DIR_GUEST='/output'
-OUTPUT_FILENAME="mikomel-demo-latest_${timestamp}.tar"
-SINGULARITY_CONTAINER_PATH="/home2/faculty/mmalkinski/singularity/mikomel-demo_${timestamp}.sif"
+OUTPUT_FILENAME="mikomel-demo-vllm-latest_${timestamp}.tar"
+SINGULARITY_CONTAINER_PATH="${group_dir}/singularity/mikomel-demo-vllm_${timestamp}.sif"
 
 env \
   DOCKER_BUILD_DIR="${DOCKER_BUILD_DIR}" \

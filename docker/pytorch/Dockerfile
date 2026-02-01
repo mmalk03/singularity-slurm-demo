@@ -1,7 +1,7 @@
-FROM nvcr.io/nvidia/tensorflow:23.04-tf2-py3
+FROM nvcr.io/nvidia/pytorch:24.08-py3
 
 RUN mkdir /app
-COPY requirements.txt /app/requirements.txt
+COPY docker/pytorch/requirements.txt /app/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r /app/requirements.txt
 

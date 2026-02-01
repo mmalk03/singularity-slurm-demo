@@ -30,22 +30,46 @@ To sync files between local and remote machines, run the following locally:
 ```
 The project files are mounted to the running container (see `--bind` in `submit.sh`), which allows to update code running in the container without rebuilding the whole image. 
 
+Some scripts mentioned below define a path to the user and group directory, e.g.:
+```bash
+user_dir="/home2/faculty/mmalkinski"
+group_dir="/mnt/evafs/groups/mandziuk-lab/mmalkinski"
+```
+When dealing with large files on the cluster, such as vLLM singularity image, prefer using the group directory over the user directory for increased disk quotas.
+Before proceeding, set these paths based on your preferences in:
+* `./scripts/remote/vllm/build.sh`
+* `./scripts/remote/vllm/submit.sh`
+
+Also, consider configuring global vLLM and vagrant cache directories to use the group directory by appending the following to `.bashrc`:
+```bash
+export MY_GROUP_DIR="/mnt/evafs/groups/mandziuk-lab/mmalkinski"
+export SINGULARITY_CACHEDIR="${MY_GROUP_DIR}/.singularity"
+export VAGRANT_HOME="${MY_GROUP_DIR}/.vagrant.d"
+```
+
 To build the singularity container from scratch, run the following on the remote machine:
 ```bash
-sbatch ./scripts/remote/build.sh
+sbatch ./scripts/remote/vllm/build.sh
 ```
 It will build the singularity container in a VM provisioned by Vagrant.
 This has to be run each time your dependencies change (or generally the content of the Dockerfile).
 
 The created file will have a timestamp in its suffix to support multiple versions.
-For easier use, reference the created file in a symbolic link that points to a static path, e.g.: 
+For easier use, reference the created file in a symbolic link that points to a static path, e.g.:
 ```bash
-ln -sf ~/singularity/mikomel-demo_2024-09-06_07-57-41.sif ~/singularity/mikomel-demo-latest.sif
+ln -sf "${group_dir}/singularity/mikomel-demo-vllm_2026-02-01_10-11-57.sif" "${group_dir}/singularity/mikomel-demo-vllm-latest.sif"
 ```
 
 To run a container with the sample script, run:
 ```bash
-sbatch ./scripts/remote/submit.sh demo/main.py -n 5
+# Python only "Hello, world!"
+sbatch ./scripts/remote/vllm/submit.sh demo/main.py -n 5
+
+# Single GPU inference using vLLM
+sbatch ./scripts/remote/vllm/submit.sh demo/vllm/main.py
+
+# Multi GPU inference using vLLM
+sbatch --gpus 2 ./scripts/remote/vllm/submit.sh demo/vllm/main.py 2
 ```
 
 Output logs of the job can be viewed with:

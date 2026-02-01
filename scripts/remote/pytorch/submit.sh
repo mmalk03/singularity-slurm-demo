@@ -20,6 +20,6 @@ singularity run \
   --nv \
   --env CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES}" \
   --bind /home2/faculty/mmalkinski/projects/singularity-slurm-demo/demo:/app/demo:ro \
-  ~/singularity/mikomel-demo-latest.sif \
+  ~/singularity/mikomel-demo-pytorch-latest.sif \
   python "${1}" "${@:2}"
 date
